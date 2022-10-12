@@ -172,5 +172,16 @@ class MainActivity : AppCompatActivity() {
 
         return tempList
     }
-    /***********************************************************************************************************************************************/
+
+    /********************************NOTIFICATION GET REMOVED WHEN WE REMPVE THE ACTIVITY********************************/
+    override fun onDestroy() {
+        super.onDestroy()
+        /********************THIS CONDITION IS WHEN THE USER STARTED THE SONG THEN PAUSE IT AND TRY TO REMOVE THE ACTIVITY ********************/
+        if(!PlayerActivity.isPlaying && PlayerActivity.musicService!=null){
+            PlayerActivity.musicService!!.stopForeground(true)
+            PlayerActivity.musicService!!.mediaPlayer!!.release()            // The resources that are occupied by the media Player must be released
+            PlayerActivity.musicService=null;
+            exitProcess(1)
+        }
+    }
 }

@@ -14,5 +14,9 @@ class FavoutiteActivity : AppCompatActivity() {
         binding= ActivityFavoutiteBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+      binding.backBtnFA.setOnClickListener{
+            finish()
+        }
+
     }
 }

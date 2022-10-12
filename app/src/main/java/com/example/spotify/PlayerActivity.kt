@@ -9,6 +9,7 @@ import android.os.IBinder
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.spotify.databinding.ActivityPlayerBinding
@@ -23,6 +24,8 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection ,MediaPlayer.OnComp
         var isPlaying:Boolean=false
         var musicService:MusicService?=null
         lateinit var binding: ActivityPlayerBinding
+
+        var repeat:Boolean=false
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,6 +78,23 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection ,MediaPlayer.OnComp
             }
         })
 
+        /*****************************************FOR REPEAT BUTTON*****************************************************/
+        binding.repeatBtnPA.setOnClickListener{
+            if(!repeat){
+                repeat=true
+                binding.repeatBtnPA.setColorFilter(ContextCompat.getColor(this,R.color.purple_500))
+            }else{
+                repeat=false
+                binding.repeatBtnPA.setColorFilter(ContextCompat.getColor(this,R.color.cool_pink))
+            }
+
+        }
+
+        /******************************************BACK BUTTON*********************************************************/
+        binding.backBtnPA.setOnClickListener{
+            finish()
+        }
+
     }
 
     private fun IntializeLayout(){
@@ -111,6 +131,9 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection ,MediaPlayer.OnComp
             .into(binding.songImgPA)
 
         binding.songNamePA.text= musicListPA[songPosition].title
+        if(repeat){
+            binding.repeatBtnPA.setColorFilter(ContextCompat.getColor(this,R.color.purple_500))
+        }
     }
 
     /*****************************Play The Audio    MAKING THIS FUNCTION GLOBALLY SO THAT IT CAN BE HANDLED BY THE notificationReciever for Play and Pause ***************************************************************************************/

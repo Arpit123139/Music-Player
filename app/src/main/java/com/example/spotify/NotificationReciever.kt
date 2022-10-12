@@ -27,6 +27,7 @@ class NotificationReciever :BroadcastReceiver() {
             ApplicationClass.EXIT-> {
                 PlayerActivity.musicService!!.stopForeground(true)
                 PlayerActivity.musicService=null;
+                PlayerActivity.musicService!!.mediaPlayer!!.release()
                 exitProcess(1)                   // Status code is 1 because we are willing closing the apllication
             }
 
