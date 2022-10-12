@@ -84,7 +84,9 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/musicRV"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:scrollbars="vertical"
+            android:scrollbarThumbVertical="@drawable/scroll_bar_icon"/>
 
     </LinearLayout>
     <!--The property at line 93 as well as line 94 is very important else the app will crash-->
