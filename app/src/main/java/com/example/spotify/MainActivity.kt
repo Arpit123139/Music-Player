@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
         /*******************************************THE ABOVE CODE SHOULD WORK WHETHER OR NOT THE PERMISSION IS ALLOWED ***********************************************************************/
 
 
-        if(requestRuntimePermission())                    /**************************THE BELOW CODE SHOULD ONLY BE EXECUTED WHEN PERMISIION IS ALLOWED*/
+        if(requestRuntimePermission())                    /**************************THE BELOW CODE SHOULD ONLY BE EXECUTED WHEN PERMISIION IS ALLOWED ELSE THE APP WILL BE CRASHED*/
         {
             /************************TO ACCESS ALL THE MEDIA FILES AND CREATING LIST ****************************************************************************/
             MusicListMA=getAllAudio()         //This function is created below
@@ -103,7 +103,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    //For requesting permission
+    //For requesting permission it will return true and false
     private fun requestRuntimePermission() :Boolean{
         if(ActivityCompat.checkSelfPermission(this, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
             != PackageManager.PERMISSION_GRANTED) {
