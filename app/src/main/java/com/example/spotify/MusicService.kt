@@ -8,7 +8,9 @@ import android.graphics.BitmapFactory
 import android.media.AudioManager
 import android.media.MediaPlayer
 import android.os.Binder
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.core.app.NotificationCompat
 
@@ -17,7 +19,7 @@ class MusicService: Service() {
     private var myBinder = MyBinder()
     var mediaPlayer:MediaPlayer? = null
     private lateinit var mediaSession : MediaSessionCompat
-    private lateinit var runnable: Runnable
+    private lateinit var runnable: Runnable                        /******************Helps us to execute the same code again and again**/
     lateinit var audioManager: AudioManager
 
     override fun onBind(intent: Intent?): IBinder {
@@ -98,9 +100,29 @@ class MusicService: Service() {
             PlayerActivity.musicService!!.mediaPlayer!!.setDataSource(PlayerActivity.musicListPA[PlayerActivity.songPosition].path)
             PlayerActivity.musicService!!.mediaPlayer!!.prepare()
             PlayerActivity.binding.playPauseBtnPA.setIconResource(R.drawable.pause_icon)
+
+            /**************************************Setting the current time stamp of the song and the final Duration and the seekbar WHEN WE CLICK NEXT IN THE NOTIFICATION *****/
+            PlayerActivity.binding.tvSeekBarStart.text= formatDuration(PlayerActivity.musicService!!.mediaPlayer!!.currentPosition.toLong())
+            PlayerActivity.binding.tvSeekBarEnd.text= formatDuration(PlayerActivity.musicService!!.mediaPlayer!!.duration.toLong())
+            PlayerActivity.binding.seekBarPA.progress= 0
+            PlayerActivity.binding.seekBarPA.max= PlayerActivity.musicService!!.mediaPlayer!!.duration
+
         }catch (e:Exception){
             return
         }
+    }
+
+    fun seekBarSetup(){
+        runnable= Runnable {
+            PlayerActivity.binding.tvSeekBarStart.text= formatDuration(PlayerActivity.musicService!!.mediaPlayer!!.currentPosition.toLong())
+            PlayerActivity.binding.seekBarPA.progress= mediaPlayer!!.currentPosition
+
+            /***********IT tells after how much time the code should run**********************************************/
+            Handler(Looper.getMainLooper()).postDelayed(runnable,200)
+        }
+        //It makes assure  the inner/above code should execute after 0ms after this code is executed then we went to the inner Handler which say the code inside the runnable should execute after 200ms
+        Handler(Looper.getMainLooper()).postDelayed(runnable,0)
+
     }
 
 }

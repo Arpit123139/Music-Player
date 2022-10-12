@@ -6,6 +6,7 @@ import android.content.ServiceConnection
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.IBinder
+import android.widget.SeekBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -54,6 +55,25 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection {
         binding.nextBtnPA.setOnClickListener{
             prevNextSong(true)
         }
+
+        /******************************************************SEEK BAR LISTENER**************************************/
+        binding.seekBarPA.setOnSeekBarChangeListener(object :SeekBar.OnSeekBarChangeListener{
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                // fromUser tell if the user had made changes
+                if(fromUser)
+                    musicService!!.mediaPlayer!!.seekTo(progress)           // It tells the media player which duration the song is played
+            }
+
+            override fun onStartTrackingTouch(p0: SeekBar?) {
+                //NOT IMPLEMEMTING
+                //USE  WHRN THE USER CLICKS ON IT
+            }
+
+            override fun onStopTrackingTouch(p0: SeekBar?) {
+                //USE WHEN THE user Leave it
+                //WE ARE NOT IMPLEMENTING IT...................................................................
+            }
+        })
 
     }
 
@@ -105,6 +125,12 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection {
             isPlaying=true
             binding.playPauseBtnPA.setIconResource(R.drawable.pause_icon)
             musicService!!.showNotificaton(R.drawable.pause_icon)
+
+            /**************************************Setting the current time stamp of the song and the final Duration and the seekbar *****/
+            binding.tvSeekBarStart.text= formatDuration(musicService!!.mediaPlayer!!.currentPosition.toLong())
+            binding.tvSeekBarEnd.text= formatDuration(musicService!!.mediaPlayer!!.duration.toLong())
+            binding.seekBarPA.progress= 0
+            binding.seekBarPA.max= musicService!!.mediaPlayer!!.duration
         }catch (e:Exception){
             return
         }
@@ -152,6 +178,7 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection {
         //After the srvice is connected then start Foreground
        // musicService!!.showNotificaton(R.drawable.pause_icon)                   /*************This function call should be inside the creteMediaPlayer because as soon as the nextButton is clicked it creates a media Player but dont call the show Notification function so by default we put it inside  THIS IS FOR THE MAIN SCREEN
 
+        musicService!!.seekBarSetup()
     }
 
     override fun onServiceDisconnected(p0: ComponentName?) {
