@@ -93,7 +93,7 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection {
         binding.songNamePA.text= musicListPA[songPosition].title
     }
 
-    /*****************************Play The Audio***************************************************************************************/
+    /*****************************Play The Audio    MAKING THIS FUNCTION GLOBALLY SO THAT IT CAN BE HANDLED BY THE notificationReciever for Play and Pause ***************************************************************************************/
     private fun createMediaPlayer(){
         try {
             if(musicService!!.mediaPlayer==null)
@@ -104,6 +104,7 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection {
             musicService!!.mediaPlayer!!.start()
             isPlaying=true
             binding.playPauseBtnPA.setIconResource(R.drawable.pause_icon)
+            musicService!!.showNotificaton(R.drawable.pause_icon)
         }catch (e:Exception){
             return
         }
@@ -131,7 +132,7 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection {
 
         if(increment)
         {
-            setSongPosition(increment)
+            setSongPosition(increment)                    // This function is made Globally in Music.kt for the notfication next and prev button to work
             setLayout()
             createMediaPlayer()
         }
@@ -141,24 +142,7 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection {
             createMediaPlayer()
         }
     }
-    /******************************************************************SET SONG POSITION****************************************************************/
-    private fun setSongPosition(increment:Boolean){
 
-        if(increment){
-            if(musicListPA.size-1== songPosition)
-                songPosition=0
-            else
-                ++songPosition
-        }
-        else{
-            if(songPosition==0)
-                songPosition= musicListPA.size-1
-            else
-                --songPosition
-
-        }
-
-    }
 
     override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
         val binder=service as MusicService.MyBinder
@@ -166,7 +150,7 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection {
         musicService=binder.currentService()
         createMediaPlayer()
         //After the srvice is connected then start Foreground
-        musicService!!.showNotificaton(R.drawable.pause_icon)
+       // musicService!!.showNotificaton(R.drawable.pause_icon)                   /*************This function call should be inside the creteMediaPlayer because as soon as the nextButton is clicked it creates a media Player but dont call the show Notification function so by default we put it inside  THIS IS FOR THE MAIN SCREEN
 
     }
 

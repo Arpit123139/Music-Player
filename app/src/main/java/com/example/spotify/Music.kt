@@ -1,6 +1,7 @@
 package com.example.spotify
 
 import android.media.MediaMetadataRetriever
+import android.media.MediaPlayer
 import java.util.concurrent.TimeUnit
 
 data class Music (val id:String,val title:String,val album:String,val artist:String,val duration:Long=0 ,val path:String,val artUri:String)
@@ -19,3 +20,23 @@ fun getImgArt(path:String): ByteArray? {                        // We cannot set
     retriever.setDataSource(path)
     return retriever.embeddedPicture
 }
+
+/******************************************************************SET SONG POSITION****************************************************************/
+ fun setSongPosition(increment:Boolean){
+
+    if(increment){
+        if(PlayerActivity.musicListPA.size-1== PlayerActivity.songPosition)
+            PlayerActivity.songPosition =0
+        else
+            ++PlayerActivity.songPosition
+    }
+    else{
+        if(PlayerActivity.songPosition ==0)
+            PlayerActivity.songPosition = PlayerActivity.musicListPA.size-1
+        else
+            --PlayerActivity.songPosition
+
+    }
+
+}
+
