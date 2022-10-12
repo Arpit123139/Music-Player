@@ -55,11 +55,19 @@ class MusicService: Service() {
         val exitIntent=Intent(baseContext,NotificationReciever::class.java).setAction(ApplicationClass.EXIT);
         val exitPendingIntent=PendingIntent.getBroadcast(baseContext,0,exitIntent,PendingIntent.FLAG_UPDATE_CURRENT)
 
+        /*********************************************Decoding The BitMap Array*************************************/
+        val imgArt= getImgArt(PlayerActivity.musicListPA[PlayerActivity.songPosition].path)
+        val image = if(imgArt!=null){
+            BitmapFactory.decodeByteArray(imgArt,0,imgArt.size)
+        }else{
+            BitmapFactory.decodeResource(resources, R.drawable.music_player_icon_slash_screen)
+        }
+
         val notification= androidx.core.app.NotificationCompat.Builder(this,ApplicationClass.CHANNEL_ID)
             .setContentTitle(PlayerActivity.musicListPA[PlayerActivity.songPosition].title)                             // Title of the notification
                     .setContentText(PlayerActivity.musicListPA[PlayerActivity.songPosition].artist)
                     .setSmallIcon(R.drawable.music_icon)
-                    .setLargeIcon(BitmapFactory.decodeResource(resources, R.drawable.music_player_icon_slash_screen))
+                    .setLargeIcon(image)
                     .setStyle(androidx.media.app.NotificationCompat.MediaStyle().setMediaSession(mediaSession.sessionToken))           //
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
