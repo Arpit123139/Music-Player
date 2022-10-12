@@ -14,7 +14,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.spotify.databinding.ActivityPlayerBinding
 
 //private lateinit var binding: ActivityPlayerBinding         We are making this as a companion object because we need it in Notification Reciever to make the icon change for play-Puse btn when the song stops from the notification
-class PlayerActivity : AppCompatActivity(),ServiceConnection {
+class PlayerActivity : AppCompatActivity(),ServiceConnection ,MediaPlayer.OnCompletionListener{
 
     companion object{
         lateinit var musicListPA:ArrayList<Music>
@@ -131,6 +131,8 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection {
             binding.tvSeekBarEnd.text= formatDuration(musicService!!.mediaPlayer!!.duration.toLong())
             binding.seekBarPA.progress= 0
             binding.seekBarPA.max= musicService!!.mediaPlayer!!.duration
+
+            musicService!!.mediaPlayer!!.setOnCompletionListener(this)
         }catch (e:Exception){
             return
         }
@@ -183,5 +185,12 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection {
 
     override fun onServiceDisconnected(p0: ComponentName?) {
         musicService=null
+    }
+
+    /*****************************************THIS FUNCTION HANDLES WHAT TO DO WHEN THE SONG COMPLETES AND PROGRESSBAR REACHES TO AN END*****/
+    override fun onCompletion(mp: MediaPlayer?) {
+        setSongPosition(true)
+        setLayout()
+        createMediaPlayer()
     }
 }
