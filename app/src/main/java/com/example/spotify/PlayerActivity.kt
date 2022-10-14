@@ -4,6 +4,7 @@ import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
 import android.media.MediaPlayer
+import android.media.audiofx.AudioEffect
 import android.os.Bundle
 import android.os.IBinder
 import android.widget.SeekBar
@@ -93,6 +94,21 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection ,MediaPlayer.OnComp
         /******************************************BACK BUTTON*********************************************************/
         binding.backBtnPA.setOnClickListener{
             finish()
+        }
+
+        /**************************************** SETTING UP THE EQUALIZER BUTTON*************************************/
+        binding.equalizerBtnPA.setOnClickListener{
+
+            try {
+                val intent=Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL)             //built in Equalizer
+                intent.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, musicService!!.mediaPlayer!!.audioSessionId)
+
+                intent.putExtra(AudioEffect.EXTRA_PACKAGE_NAME,baseContext.packageName)               // If we does not set this then it will change the audio of the whole phone
+                intent.putExtra(AudioEffect.EXTRA_CONTENT_TYPE,AudioEffect.CONTENT_TYPE_MUSIC)
+                startActivityForResult(intent,13)
+            }catch (e:Exception){
+                Toast.makeText(this,"Equalizer feature Not supported",Toast.LENGTH_SHORT).show()
+            }
         }
 
     }
@@ -215,5 +231,13 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection ,MediaPlayer.OnComp
         setSongPosition(true)
         setLayout()
         createMediaPlayer()
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(requestCode== 13  || resultCode== RESULT_OK){
+            return;
+        }
     }
 }
