@@ -7,6 +7,7 @@ import android.media.MediaPlayer
 import android.media.audiofx.AudioEffect
 import android.os.Bundle
 import android.os.IBinder
+import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -14,6 +15,7 @@ import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.spotify.databinding.ActivityPlayerBinding
+import com.google.android.material.bottomsheet.BottomSheetDialog
 
 //private lateinit var binding: ActivityPlayerBinding         We are making this as a companion object because we need it in Notification Reciever to make the icon change for play-Puse btn when the song stops from the notification
 class PlayerActivity : AppCompatActivity(),ServiceConnection ,MediaPlayer.OnCompletionListener{
@@ -109,6 +111,11 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection ,MediaPlayer.OnComp
             }catch (e:Exception){
                 Toast.makeText(this,"Equalizer feature Not supported",Toast.LENGTH_SHORT).show()
             }
+        }
+
+        /*********************************************TIMER BUTTON FUNCTIONALITY***********************************/
+        binding.timerBtnPA.setOnClickListener{
+            showBottomSheetDialog()
         }
 
     }
@@ -239,5 +246,26 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection ,MediaPlayer.OnComp
         if(requestCode== 13  || resultCode== RESULT_OK){
             return;
         }
+    }
+
+    /******************************************SETTING UP BOTTOM SHEET DIALOG FOR TIMER********************************/
+    private fun showBottomSheetDialog(){
+        val dialog=BottomSheetDialog(this@PlayerActivity)
+        dialog.setContentView(R.layout.bottom_sheet_dialog)
+        dialog.show()
+
+        dialog.findViewById<LinearLayout>(R.id.min_15)?.setOnClickListener{
+            Toast.makeText(baseContext,"Music will stop in 25 min",Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
+        }
+        dialog.findViewById<LinearLayout>(R.id.min_30)?.setOnClickListener{
+            Toast.makeText(baseContext,"Music will stop in 30 min",Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
+        }
+        dialog.findViewById<LinearLayout>(R.id.min_60)?.setOnClickListener{
+            Toast.makeText(baseContext,"Music will stop in 60 min",Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
+        }
+
     }
 }
