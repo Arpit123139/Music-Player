@@ -2,6 +2,7 @@ package com.example.spotify
 
 import android.media.MediaMetadataRetriever
 import java.util.concurrent.TimeUnit
+import kotlin.system.exitProcess
 
 data class Music (val id:String,val title:String,val album:String,val artist:String,val duration:Long=0 ,val path:String,val artUri:String)
 
@@ -40,6 +41,17 @@ fun getImgArt(path:String): ByteArray? {                        // We cannot set
         }
     }
 
+
+}
+
+/*************************************For Closing the Activity*********************************************/
+fun exitApplication(){
+    if(PlayerActivity!=null){
+        PlayerActivity.musicService!!.stopForeground(true)
+        PlayerActivity.musicService=null;
+        PlayerActivity.musicService!!.mediaPlayer!!.release()
+        exitProcess(1)
+    }
 
 }
 

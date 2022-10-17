@@ -3,19 +3,23 @@ package com.example.spotify
 import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
+import android.graphics.Color
 import android.media.MediaPlayer
 import android.media.audiofx.AudioEffect
+import android.net.Uri
 import android.os.Bundle
 import android.os.IBinder
 import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.spotify.databinding.ActivityPlayerBinding
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 //private lateinit var binding: ActivityPlayerBinding         We are making this as a companion object because we need it in Notification Reciever to make the icon change for play-Puse btn when the song stops from the notification
 class PlayerActivity : AppCompatActivity(),ServiceConnection ,MediaPlayer.OnCompletionListener{
@@ -29,6 +33,10 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection ,MediaPlayer.OnComp
         lateinit var binding: ActivityPlayerBinding
 
         var repeat:Boolean=false
+
+        var min15:Boolean=false
+        var min30:Boolean=false
+        var min60:Boolean=false
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -115,8 +123,36 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection ,MediaPlayer.OnComp
 
         /*********************************************TIMER BUTTON FUNCTIONALITY***********************************/
         binding.timerBtnPA.setOnClickListener{
-            showBottomSheetDialog()
+            val timer=min15 || min30 || min60
+            if(!timer) showBottomSheetDialog()                                //    Whrn no time is selected
+            else{
+                val builder= MaterialAlertDialogBuilder(this)
+                builder.setTitle("Stop Timer")
+                    .setMessage("Do you want to Stop Timer ?")
+                    .setPositiveButton("Yes"){_,_->
+                        min15=false;
+                        min30=false;
+                        min60=false
+                        binding.timerBtnPA.setColorFilter(ContextCompat.getColor(this,R.color.cool_pink))
+                    }
+                    .setNegativeButton("No"){dialog,_->
+                        dialog.dismiss()
+                    }
+                val customDialog=builder.create()
+                customDialog.show()
+                customDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.RED)
+                customDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED)
+            }
         }
+
+        /*********************************************Sharing song FILE SHARING***************************************************/
+        binding.shareBtnPA.setOnClickListener{
+            val shareIntent=Intent()
+            shareIntent.action=Intent.ACTION_SEND                    // What does the intent do
+            shareIntent.type="audio/*"                                //      /* MEANS ant extension
+            shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(musicListPA[songPosition].path))
+            startActivity(Intent.createChooser(shareIntent,"Sharing Music File !!"))           // Implements a chooser whether we have to share from whatsapp /email or anything
+         }
 
     }
 
@@ -156,6 +192,9 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection ,MediaPlayer.OnComp
         binding.songNamePA.text= musicListPA[songPosition].title
         if(repeat){
             binding.repeatBtnPA.setColorFilter(ContextCompat.getColor(this,R.color.purple_500))
+        }
+        if(min15 || min30 ||min60){
+            binding.timerBtnPA.setColorFilter(ContextCompat.getColor(this,R.color.purple_500))
         }
     }
 
@@ -255,15 +294,34 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection ,MediaPlayer.OnComp
         dialog.show()
 
         dialog.findViewById<LinearLayout>(R.id.min_15)?.setOnClickListener{
-            Toast.makeText(baseContext,"Music will stop in 25 min",Toast.LENGTH_SHORT).show()
+            Toast.makeText(baseContext,"Music will stop in 15 min",Toast.LENGTH_SHORT).show()
+            binding.timerBtnPA.setColorFilter(ContextCompat.getColor(this,R.color.purple_500))
+
+            min15=true;
+            /*********************There is no mthod to stop the thread directly so everytime we ar checking it *********************/
+            // 60000 ms is equal to 1 min
+            Thread{Thread.sleep(15*60000)                             // After every 15 min it will check the min15 variable
+            if(min15) exitApplication()}.start()                       // This function is made in Music.kt
             dialog.dismiss()
         }
         dialog.findViewById<LinearLayout>(R.id.min_30)?.setOnClickListener{
             Toast.makeText(baseContext,"Music will stop in 30 min",Toast.LENGTH_SHORT).show()
+            binding.timerBtnPA.setColorFilter(ContextCompat.getColor(this,R.color.purple_500))
+
+            min30=true;
+            Thread{Thread.sleep(30*60000)
+                if(min30) exitApplication()}.start()                       // This function is made in Music.kt
+            dialog.dismiss()
             dialog.dismiss()
         }
         dialog.findViewById<LinearLayout>(R.id.min_60)?.setOnClickListener{
             Toast.makeText(baseContext,"Music will stop in 60 min",Toast.LENGTH_SHORT).show()
+            binding.timerBtnPA.setColorFilter(ContextCompat.getColor(this,R.color.purple_500))
+
+            min60=true;
+            Thread{Thread.sleep(60*60000)
+                if(min60) exitApplication()}.start()                       // This function is made in Music.kt
+            dialog.dismiss()
             dialog.dismiss()
         }
 

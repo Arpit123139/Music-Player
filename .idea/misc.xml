@@ -18,6 +18,7 @@
         <entry key="..\:/Users/Arpit/AndroidStudioProjects/Spotify/app/src/main/res/drawable/playlist_icon.xml" value="0.1405" />
         <entry key="..\:/Users/Arpit/AndroidStudioProjects/Spotify/app/src/main/res/drawable/previous_icon.xml" value="0.1" />
         <entry key="..\:/Users/Arpit/AndroidStudioProjects/Spotify/app/src/main/res/drawable/scroll_bar_icon.xml" value="0.1525" />
+        <entry key="..\:/Users/Arpit/AndroidStudioProjects/Spotify/app/src/main/res/drawable/search_icon.xml" value="0.177" />
         <entry key="..\:/Users/Arpit/AndroidStudioProjects/Spotify/app/src/main/res/drawable/settings_icon.xml" value="0.215" />
         <entry key="..\:/Users/Arpit/AndroidStudioProjects/Spotify/app/src/main/res/drawable/share_icon.xml" value="0.215" />
         <entry key="..\:/Users/Arpit/AndroidStudioProjects/Spotify/app/src/main/res/drawable/shuffle_icon.xml" value="0.1405" />
@@ -33,6 +34,7 @@
         <entry key="..\:/Users/Arpit/AndroidStudioProjects/Spotify/app/src/main/res/layout/nav_header.xml" value="0.2713541666666667" />
         <entry key="..\:/Users/Arpit/AndroidStudioProjects/Spotify/app/src/main/res/layout/playlist_icon.xml" value="0.2604166666666667" />
         <entry key="..\:/Users/Arpit/AndroidStudioProjects/Spotify/app/src/main/res/menu/nav_menu.xml" value="0.2713541666666667" />
+        <entry key="..\:/Users/Arpit/AndroidStudioProjects/Spotify/app/src/main/res/menu/search_view_menu.xml" value="0.27447916666666666" />
       </map>
     </option>
   </component>

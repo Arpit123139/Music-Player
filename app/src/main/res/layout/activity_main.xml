@@ -89,7 +89,7 @@
             android:scrollbarThumbVertical="@drawable/scroll_bar_icon"/>
 
     </LinearLayout>
-    <!--The property at line 93 as well as line 94 is very important else the app will crash-->
+    The property at line 93 as well as line 94 is very important else the app will crash
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navView"
         android:layout_width="wrap_content"
@@ -97,7 +97,8 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header"
-        app:menu="@menu/nav_menu"/>
+        app:menu="@menu/nav_menu"
+        />
 
 
 </androidx.drawerlayout.widget.DrawerLayout>
