@@ -181,6 +181,12 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection ,MediaPlayer.OnComp
                 setLayout()
 
             }
+            "MusicAdapterSearch"->{
+                musicListPA= ArrayList()
+                musicListPA.addAll(MainActivity.MusicListSearch)
+                setLayout()
+            }
+
         }
     }
 

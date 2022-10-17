@@ -8,12 +8,14 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spotify.databinding.ActivityMainBinding
@@ -34,6 +36,11 @@ class MainActivity : AppCompatActivity() {
 
     companion object{
         lateinit var MusicListMA:ArrayList<Music>
+
+        /*******************************************THIS LIST IS FOR THE SONG SEARCH************************************/
+        lateinit var MusicListSearch:ArrayList<Music>
+
+        var search:Boolean=false
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,8 +62,9 @@ class MainActivity : AppCompatActivity() {
         /*******************************************THE ABOVE CODE SHOULD WORK WHETHER OR NOT THE PERMISSION IS ALLOWED ***********************************************************************/
 
 
-        if(requestRuntimePermission())                    /**************************THE BELOW CODE SHOULD ONLY BE EXECUTED WHEN PERMISIION IS ALLOWED ELSE THE APP WILL BE CRASHED*/
+        if(requestRuntimePermission())    /**************************THE BELOW CODE SHOULD ONLY BE EXECUTED WHEN PERMISIION IS ALLOWED ELSE THE APP WILL BE CRASHED*/
         {
+            search=false
             /************************TO ACCESS ALL THE MEDIA FILES AND CREATING LIST ****************************************************************************/
             MusicListMA=getAllAudio()         //This function is created below
             /******************************************************************************************************************/
@@ -197,7 +205,7 @@ class MainActivity : AppCompatActivity() {
         return tempList
     }
 
-    /********************************NOTIFICATION GET REMOVED WHEN WE REMPVE THE ACTIVITY********************************/
+    /********************************NOTIFICATION GET REMOVED WHEN WE REMOVE THE ACTIVITY********************************/
     override fun onDestroy() {
         super.onDestroy()
         /********************THIS CONDITION IS WHEN THE USER STARTED THE SONG THEN PAUSE IT AND TRY TO REMOVE THE ACTIVITY ********************/
@@ -208,4 +216,36 @@ class MainActivity : AppCompatActivity() {
             exitProcess(1)
         }
     }
+
+    /******************************************************For Creating the search View in Menu*************************/
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+
+        menuInflater.inflate(R.menu.search_view_menu,menu);
+        val searchView=menu?.findItem(R.id.search_view)?.actionView as androidx.appcompat.widget.SearchView
+        /********************************TAKING refernce of the search view and Handling OnQueryTextListner******************/
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                // User press the enters button
+                return true;
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {      // newText is the text that we are typping
+                //When the user is typing then only the search results are visible
+                MusicListSearch= ArrayList()
+                if(newText!=null){
+                    val userInput=newText.lowercase()
+                    for(song in MusicListMA){
+                        if(song.title.lowercase().contains(userInput))
+                            MusicListSearch.add(song)                        // we are adding song in the musicListSearch which matched with the userInput
+                    }
+                    search=true
+                    musicAdapter.updateMusicList(MusicListSearch)            // we are changing the list of music  that must be visible in the mainScreen  in the recyclerView
+                }
+                return true;
+            }
+        })
+        return super.onCreateOptionsMenu(menu)
+    }
+
+
 }

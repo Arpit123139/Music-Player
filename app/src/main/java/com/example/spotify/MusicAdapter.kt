@@ -10,7 +10,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.spotify.databinding.MusicViewBinding
 
-class MusicAdapter(private val context: Context, private val musicList: ArrayList<Music>):RecyclerView.Adapter<MusicAdapter.MyHolder>() {
+class MusicAdapter(private val context: Context, private var musicList: ArrayList<Music>):RecyclerView.Adapter<MusicAdapter.MyHolder>() {
 
     class MyHolder(binding: MusicViewBinding) :RecyclerView.ViewHolder(binding.root) {
 
@@ -34,15 +34,34 @@ class MusicAdapter(private val context: Context, private val musicList: ArrayLis
             .into(holder.image)
         /********************If somebody click on the item********************************************/
         holder.root.setOnClickListener{
-            val intent= Intent(context,PlayerActivity::class.java)
-            // Adding some extra value via Intent
-            intent.putExtra("index",position)
-            intent.putExtra("Class","MusicAdapter")                        // To determine from which class the intent has arrived
-            ContextCompat.startActivity(context,intent,null)
+//            val intent= Intent(context,PlayerActivity::class.java)
+//            // Adding some extra value via Intent
+//            intent.putExtra("index",position)
+//            intent.putExtra("Class","MusicAdapter")                        // To determine from which class the intent has arrived
+//            ContextCompat.startActivity(context,intent,null)
+            when{
+                MainActivity.search->sendIntent("MusicAdapterSearch",position)         //We are sending the different intent when we enable Search  because the list of song tha are visible in the main Screen are store in MusicListSearch
+                else->sendIntent("MusicAdapter",position)
+            }
+
         }
     }
 
     override fun getItemCount(): Int {
         return musicList.size
+    }
+
+    fun updateMusicList(searchList: ArrayList<Music>){
+        musicList= ArrayList();
+        musicList.addAll(searchList);
+        notifyDataSetChanged()
+    }
+
+    private fun sendIntent(ref:String,pos:Int){
+        val intent= Intent(context,PlayerActivity::class.java)
+        // Adding some extra value via Intent
+        intent.putExtra("index",pos)
+        intent.putExtra("Class",ref)                        // To determine from which class the intent has arrived
+        ContextCompat.startActivity(context,intent,null)
     }
 }
