@@ -40,6 +40,7 @@
        app:iconSize="40dp"
        app:iconTint="@color/white" />
 
+   <!--For the moving text we have at line 52 and 54-->
    <TextView
        android:id="@+id/SongNameNP"
        android:layout_width="wrap_content"
@@ -48,7 +49,10 @@
        android:textSize="18sp"
        android:textStyle="bold"
        android:textColor="@color/white"
+       android:ellipsize="marquee"
        android:gravity="center"
+       android:marqueeRepeatLimit="marquee_forever"
+       android:singleLine="true"
        android:layout_toStartOf="@id/playPauseBtnNP"
        android:layout_toEndOf="@id/songImgNP"
        />

@@ -50,6 +50,8 @@ class NowPlaying : Fragment() {
     override fun onResume() {
         if(PlayerActivity.musicService!=null){
             binding.root.visibility=View.VISIBLE
+            //For the moving Text
+            binding.SongNameNP.isSelected=true;
 
             Glide.with(this).load(PlayerActivity.musicListPA[PlayerActivity.songPosition].artUri).apply(
                 RequestOptions().placeholder(R.drawable.music).centerCrop())        // If the image does not load properly
