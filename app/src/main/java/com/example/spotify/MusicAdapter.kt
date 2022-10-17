@@ -41,6 +41,7 @@ class MusicAdapter(private val context: Context, private var musicList: ArrayLis
 //            ContextCompat.startActivity(context,intent,null)
             when{
                 MainActivity.search->sendIntent("MusicAdapterSearch",position)         //We are sending the different intent when we enable Search  because the list of song tha are visible in the main Screen are store in MusicListSearch
+                musicList[position].id==PlayerActivity.nowPlayingId ->sendIntent("NowPlaying",position)    // this is the intent which need to be sent when we click on the same song again which is already Playing and we are Passing NowPlaying because in this the service is not started again so the song will resume where we left
                 else->sendIntent("MusicAdapter",position)
             }
 

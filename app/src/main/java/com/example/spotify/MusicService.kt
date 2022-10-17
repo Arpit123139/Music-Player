@@ -107,6 +107,9 @@ class MusicService: Service() {
             PlayerActivity.binding.seekBarPA.progress= 0
             PlayerActivity.binding.seekBarPA.max= PlayerActivity.musicService!!.mediaPlayer!!.duration
 
+            /*****************this code is added to make sure when the current song is playing and we click on the same song again thaen it does not begin from start*********/
+            PlayerActivity.nowPlayingId = PlayerActivity.musicListPA[PlayerActivity.songPosition].id
+
         }catch (e:Exception){
             return
         }

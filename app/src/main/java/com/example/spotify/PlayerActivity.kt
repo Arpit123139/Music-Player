@@ -37,6 +37,9 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection ,MediaPlayer.OnComp
         var min15:Boolean=false
         var min30:Boolean=false
         var min60:Boolean=false
+
+        // tell the current song playing id
+        var nowPlayingId:String=""
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,10 +48,10 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection ,MediaPlayer.OnComp
         binding= ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        /********************************************Starting The Service*********************************************/
-        val intent= Intent(this,MusicService::class.java)
-        bindService(intent,this, BIND_AUTO_CREATE)
-        startService(intent)
+        /********************************************Starting The Service We are removing the code from here because when the NowFragment is clicked we dont want the service to start again so we are starting the service individually in the initializeLayout()   *********************************************/
+//        val intent= Intent(this,MusicService::class.java)
+//        bindService(intent,this, BIND_AUTO_CREATE)
+//        startService(intent)
 
         IntializeLayout()
 
@@ -162,19 +165,22 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection ,MediaPlayer.OnComp
         songPosition=intent.getIntExtra("index",0)
         when(intent.getStringExtra("Class")){
             "MusicAdapter"->{
+                val intent= Intent(this,MusicService::class.java)
+                bindService(intent,this, BIND_AUTO_CREATE)
+                startService(intent)
+
                 musicListPA= ArrayList()
                 musicListPA.addAll(MainActivity.MusicListMA)
                 Toast.makeText(this,"Enter the Music Adapter", Toast.LENGTH_SHORT).show()
                 /***********************************************SETTING THE LAYOUT WHEN THE SONG IS CLICKED ***********************************************/
                 setLayout()
-                /*****************************Play The Audio***************************************************************************************/
-                //by defaqult Class
-
-
-
             }
             /************************************************SHUFFLE FUNCTIONALITY*******************************************************************/
             "MainActivity"->{
+                val intent= Intent(this,MusicService::class.java)
+                bindService(intent,this, BIND_AUTO_CREATE)
+                startService(intent)
+
                 musicListPA= ArrayList()
                 musicListPA.addAll(MainActivity.MusicListMA)
                 musicListPA.shuffle()
@@ -182,9 +188,24 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection ,MediaPlayer.OnComp
 
             }
             "MusicAdapterSearch"->{
+                val intent= Intent(this,MusicService::class.java)
+                bindService(intent,this, BIND_AUTO_CREATE)
+                startService(intent)
                 musicListPA= ArrayList()
                 musicListPA.addAll(MainActivity.MusicListSearch)
                 setLayout()
+            }
+
+            "NowPlaying"->{
+                setLayout()
+                /************Here we have to initialize all the views because we are not starting the Activity Again **************/
+                binding.tvSeekBarStart.text= formatDuration(musicService!!.mediaPlayer!!.currentPosition.toLong())
+                binding.tvSeekBarEnd.text=formatDuration(musicService!!.mediaPlayer!!.duration.toLong())
+                binding.seekBarPA.progress= musicService!!.mediaPlayer!!.currentPosition
+                binding.seekBarPA.max= musicService!!.mediaPlayer!!.duration
+
+                if(isPlaying) binding.playPauseBtnPA.setIconResource(R.drawable.pause_icon)
+                else binding.playPauseBtnPA.setIconResource(R.drawable.play_icon)
             }
 
         }
@@ -207,6 +228,7 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection ,MediaPlayer.OnComp
     /*****************************Play The Audio    MAKING THIS FUNCTION GLOBALLY SO THAT IT CAN BE HANDLED BY THE notificationReciever for Play and Pause ***************************************************************************************/
     private fun createMediaPlayer(){
         try {
+
             if(musicService!!.mediaPlayer==null)
                 musicService!!.mediaPlayer= MediaPlayer()
             musicService!!.mediaPlayer!!.reset()
@@ -222,6 +244,8 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection ,MediaPlayer.OnComp
             binding.tvSeekBarEnd.text= formatDuration(musicService!!.mediaPlayer!!.duration.toLong())
             binding.seekBarPA.progress= 0
             binding.seekBarPA.max= musicService!!.mediaPlayer!!.duration
+            /*****************this code is added to make sure when the current song is playing and we click on the same song again thaen it does not begin from start This same function is created in musicService.CreateMediaPlayer because from there as well we create a PlayerActivity *********/
+            nowPlayingId= musicListPA[songPosition].id
 
             musicService!!.mediaPlayer!!.setOnCompletionListener(this)
         }catch (e:Exception){

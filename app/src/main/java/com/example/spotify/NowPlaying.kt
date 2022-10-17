@@ -1,9 +1,11 @@
 package com.example.spotify
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -41,6 +43,15 @@ class NowPlaying : Fragment() {
             PlayerActivity.musicService!!.showNotificaton(R.drawable.pause_icon)
 
             PlayMusic();
+        }
+
+        /*************************WHEN CLICKED ANYWHERE IN THE NOW FRAGMENT JUST REACH TO PLAYER ACTIVITY**************************/
+        binding.root.setOnClickListener{
+            val intent= Intent(requireContext(),PlayerActivity::class.java)
+            // Adding some extra value via Intent
+            intent.putExtra("index",PlayerActivity.songPosition)
+            intent.putExtra("Class","NowPlaying")                        // To determine from which class the intent has arrived
+            ContextCompat.startActivity(requireContext(),intent,null)
         }
         return view
     }
