@@ -41,12 +41,14 @@ class NotificationReciever :BroadcastReceiver() {
         PlayerActivity.musicService!!.mediaPlayer!!.start()
         PlayerActivity.musicService!!.showNotificaton(R.drawable.pause_icon)
         PlayerActivity.binding.playPauseBtnPA.setIconResource(R.drawable.pause_icon)
+        NowPlaying.binding.playPauseBtnNP.setIconResource(R.drawable.pause_icon)
     }
     private fun pauseMusic(){
         PlayerActivity.isPlaying=false;
         PlayerActivity.musicService!!.mediaPlayer!!.pause()
         PlayerActivity.musicService!!.showNotificaton(R.drawable.play_icon)
         PlayerActivity.binding.playPauseBtnPA.setIconResource(R.drawable.play_icon)
+        NowPlaying.binding.playPauseBtnNP.setIconResource(R.drawable.play_icon)
     }
 
     private fun prevNextSong(increment:Boolean,context: Context){
@@ -64,6 +66,14 @@ class NotificationReciever :BroadcastReceiver() {
             RequestOptions().placeholder(R.drawable.music).centerCrop())        // If the image does not load properly
             .into(PlayerActivity.binding.songImgPA)
         PlayerActivity.binding.songNamePA.text= PlayerActivity.musicListPA[PlayerActivity.songPosition].title
+
+        // Changing the layout of NowFragment as the next button in the notification is clicked
+        Glide.with(context).load(PlayerActivity.musicListPA[PlayerActivity.songPosition].artUri).apply(
+            RequestOptions().placeholder(R.drawable.music).centerCrop())        // If the image does not load properly
+            .into(NowPlaying.binding.songImgNP)
+
+        NowPlaying.binding.SongNameNP.text =PlayerActivity.musicListPA[PlayerActivity.songPosition].title;
+
 
         playMusic()
 
