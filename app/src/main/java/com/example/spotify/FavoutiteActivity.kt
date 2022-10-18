@@ -30,8 +30,14 @@ class FavoutiteActivity : AppCompatActivity() {
 
 
 
+
+
       binding.backBtnFA.setOnClickListener{
             finish()
+        }
+
+        binding.shuffleBtnFA.setOnClickListener{
+
         }
 
     }

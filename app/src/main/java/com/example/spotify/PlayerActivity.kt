@@ -160,6 +160,7 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection ,MediaPlayer.OnComp
             startActivity(Intent.createChooser(shareIntent,"Sharing Music File !!"))           // Implements a chooser whether we have to share from whatsapp /email or anything
          }
 
+        /**************************Handling the favourite button***********************************************************/
         binding.favouriteBtnPA.setOnClickListener{
             if(isFavourite){
                 binding.favouriteBtnPA.setImageResource(R.drawable.favourite_empty_icon);

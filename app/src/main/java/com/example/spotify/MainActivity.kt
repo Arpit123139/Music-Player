@@ -20,6 +20,8 @@ import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.spotify.databinding.ActivityMainBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.gson.GsonBuilder
+import com.google.gson.reflect.TypeToken
 import java.io.File
 import kotlin.system.exitProcess
 
@@ -78,6 +80,16 @@ class MainActivity : AppCompatActivity() {
             binding.musicRV.adapter=musicAdapter
             binding.totalSongs.text="Total Songs : "+ MusicListMA.size.toString()
             /*********************************************************************************************************************/
+
+            /*********************************************FOR RETRIEVING FAVOURITES DATA USING SHARED PREFERENCES**************/
+            FavoutiteActivity.favouriteSongs=ArrayList()           // Initializing it else the repeated value will be there
+            val editor=getSharedPreferences("FAVOURITES", MODE_PRIVATE)
+            val jsonString=editor.getString("FavouriteSongs",null)                // If the jsonString is not returned then return the default value that is null
+            val typeToken=object: TypeToken<ArrayList<Music>>(){}.type
+            if(jsonString!=null){
+                val data :ArrayList<Music> = GsonBuilder().create().fromJson(jsonString,typeToken)    // Converting json String to a specific type that is TypeTokem
+                 FavoutiteActivity.favouriteSongs.addAll(data)                                        // Adding To the favouriteList
+            }
         }
 
 
@@ -215,6 +227,7 @@ class MainActivity : AppCompatActivity() {
             PlayerActivity.musicService=null;
             exitProcess(1)
         }
+
     }
 
     /******************************************************For Creating the search View in Menu*************************/
@@ -245,6 +258,19 @@ class MainActivity : AppCompatActivity() {
             }
         })
         return super.onCreateOptionsMenu(menu)
+    }
+
+    /*********************************THIS METHOD COMES INTO PLAY AS MANY TIME THE MAIN ACTIVITY IS VISIBLE TO US**********/
+    /***************************DATA MUST BE STORED WHEN THERE THE ACTIVITY IS RESUME AGAIN ***************************/
+
+    override fun onResume() {
+
+        /*********************************************FOR STORING FAVOURITES DATA USING SHARED PREFERENCES**************/
+        val editor=getSharedPreferences("FAVOURITES", MODE_PRIVATE).edit()
+        val jsonString= GsonBuilder().create().toJson(FavoutiteActivity.favouriteSongs);    // Converting favouriteSong list into jsonString
+        editor.putString("FavouriteSongs",jsonString)            // Store in the key value pair....
+        editor.apply()
+        super.onResume()
     }
 
 

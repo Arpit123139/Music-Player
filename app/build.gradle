@@ -51,4 +51,7 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.13.2'
     //for Notification
     implementation 'androidx.media:media:1.3.1'
+
+    //json  As the sharePreferences only store Primitive Data so we cannot store the MusicList so me make use of json
+    implementation 'com.google.code.gson:gson:2.8.5'
 }
