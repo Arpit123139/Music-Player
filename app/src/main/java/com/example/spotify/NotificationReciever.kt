@@ -73,9 +73,11 @@ class NotificationReciever :BroadcastReceiver() {
             .into(NowPlaying.binding.songImgNP)
 
         NowPlaying.binding.SongNameNP.text =PlayerActivity.musicListPA[PlayerActivity.songPosition].title;
-
-
         playMusic()
+        /**********************************This function is responsible when we change the song through the notification the favourite icon shoulb be set Accordingly**/
+        PlayerActivity.fIndex= favouriteChecker(PlayerActivity.musicListPA[PlayerActivity.songPosition].id)            // This function changes the isFavourite value and also return the index
+        if(PlayerActivity.isFavourite) PlayerActivity.binding.favouriteBtnPA.setImageResource(R.drawable.favourite_icon)
+        else PlayerActivity.binding.favouriteBtnPA.setImageResource(R.drawable.favourite_empty_icon)
 
     }
 }

@@ -54,4 +54,16 @@ fun exitApplication(){
     }
 
 }
+/***************************************Global FUNCTION TO CHECK THE SONG IS FAVOURITE OFR NOT************************/
+fun favouriteChecker(id: String):Int{
+    PlayerActivity.isFavourite=false;
+    FavoutiteActivity.favouriteSongs.forEachIndexed{index,music->
+        if(id==music.id){
+            PlayerActivity.isFavourite=true;
+            return index;
+        }
+
+    }
+    return -1;
+}
 

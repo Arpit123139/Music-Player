@@ -40,6 +40,9 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection ,MediaPlayer.OnComp
 
         // tell the current song playing id
         var nowPlayingId:String=""
+
+        var isFavourite:Boolean=false
+        var fIndex:Int=-1
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -157,6 +160,19 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection ,MediaPlayer.OnComp
             startActivity(Intent.createChooser(shareIntent,"Sharing Music File !!"))           // Implements a chooser whether we have to share from whatsapp /email or anything
          }
 
+        binding.favouriteBtnPA.setOnClickListener{
+            if(isFavourite){
+                binding.favouriteBtnPA.setImageResource(R.drawable.favourite_empty_icon);
+                isFavourite=false
+                //Removing from the favourite list
+                FavoutiteActivity.favouriteSongs.removeAt(fIndex)
+            }else{
+                binding.favouriteBtnPA.setImageResource(R.drawable.favourite_icon);
+                isFavourite=true
+                //Add the song to the List
+                FavoutiteActivity.favouriteSongs.add(musicListPA[songPosition])
+            }
+        }
     }
 
     private fun IntializeLayout(){
@@ -208,11 +224,28 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection ,MediaPlayer.OnComp
                 else binding.playPauseBtnPA.setIconResource(R.drawable.play_icon)
             }
 
+            "FavouriteAdapter"->{
+                val intent= Intent(this,MusicService::class.java)
+                bindService(intent,this, BIND_AUTO_CREATE)
+                startService(intent)
+                musicListPA= ArrayList()
+                musicListPA.addAll(FavoutiteActivity.favouriteSongs)
+                setLayout()
+            }
+
         }
     }
 
     /***********************************************SETTING THE LAYOUT WHEN THE SONG IS CLICKED ***********************************************/
     private fun setLayout(){
+        /**********************************Adding code for the favourite Song FOR FILLING THE FAVOURITE BUTTON***************************************/
+        fIndex= favouriteChecker(musicListPA[songPosition].id)
+        if(isFavourite)
+        {
+            binding.favouriteBtnPA.setImageResource(R.drawable.favourite_icon)
+        }else{
+            binding.favouriteBtnPA.setImageResource(R.drawable.favourite_empty_icon)
+        }
         Glide.with(this).load(musicListPA[songPosition].artUri).apply(RequestOptions().placeholder(R.drawable.music).centerCrop())        // If the image does not load properly
             .into(binding.songImgPA)
 
