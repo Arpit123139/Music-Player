@@ -2,9 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.spotify">
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
-
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
@@ -17,6 +16,9 @@
         android:roundIcon="@drawable/music"
         android:supportsRtl="true"
         android:theme="@style/splash_screen">
+        <activity
+            android:name=".PlaylistDetails"
+            android:exported="false" />
         <activity
             android:name=".PlayListActivity"
             android:exported="false" />
@@ -36,14 +38,16 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".MusicService"
+        <service
+            android:name=".MusicService"
             android:enabled="true"
-            android:exported="false">              <!--system can only instantiate the service no other app-->
+            android:exported="false"> <!-- system can only instantiate the service no other app -->
 
         </service>
 
-        <receiver android:name=".NotificationReciever"
-            android:enabled="true"/>
+        <receiver
+            android:name=".NotificationReciever"
+            android:enabled="true" />
     </application>
 
 </manifest>

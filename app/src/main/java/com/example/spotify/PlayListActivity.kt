@@ -99,12 +99,12 @@ class PlayListActivity : AppCompatActivity() {
             tempPlaylist.name = name
             tempPlaylist.playlist = ArrayList()
             tempPlaylist.createdBy = createdBy
-            /***Formatting The Date**/
+            /***Formatting The Date************************************************************************************/
             val calendar = Calendar.getInstance().time
             val sdf = SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH)
             tempPlaylist.createdOn = sdf.format(calendar)
 
-            /****Adding the playList to the mainList which shows the data in the RecyclerView***/
+            /****Adding the playList to the mainList which shows the data in the RecyclerView*****************************/
             musicPlaylist.ref.add(tempPlaylist)
             adapter.refreshPlayList()
         }
