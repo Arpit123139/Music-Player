@@ -6,6 +6,18 @@ import kotlin.system.exitProcess
 
 data class Music (val id:String,val title:String,val album:String,val artist:String,val duration:Long=0 ,val path:String,val artUri:String)
 
+/********************************************************CLASS FOR THE PLAYLIST***************************************/
+class PlayList{
+    lateinit var name:String
+    lateinit var playlist:ArrayList<Music>
+    lateinit var createdBy:String
+    lateinit var createdOn:String
+}
+// We can take the direct reference but during storage in Shared Preference it may create some problem
+class MusicPlayList{
+    var ref:ArrayList<PlayList> = ArrayList()
+}
+/**********************************************************************************************************************************/
 fun formatDuration(duration:Long):String{
 
     val minutes=TimeUnit.MINUTES.convert(duration,TimeUnit.MILLISECONDS)                  // It will convert the milliseconds into minutes

@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.spotify.databinding.PlaylistViewBinding
 
-class PlaylistViewAdapter(private val context: Context, private var playlistList: ArrayList<String>): RecyclerView.Adapter<PlaylistViewAdapter.MyHolder>() {
+class PlaylistViewAdapter(private val context: Context, private var playlistList: ArrayList<PlayList>): RecyclerView.Adapter<PlaylistViewAdapter.MyHolder>() {
 
     class MyHolder(binding: PlaylistViewBinding) : RecyclerView.ViewHolder(binding.root) {
         val image=binding.playlistImg
@@ -20,13 +20,19 @@ class PlaylistViewAdapter(private val context: Context, private var playlistList
     }
 
     override fun onBindViewHolder(holder:MyHolder, position: Int) {
-        holder.name.text=playlistList[position]
+        holder.name.text=playlistList[position].name
         holder.name.isSelected=true                         // For the moving Text
 
     }
 
     override fun getItemCount(): Int {
         return playlistList.size
+    }
+
+    fun refreshPlayList(){
+        playlistList= ArrayList();
+        playlistList.addAll(PlayListActivity.musicPlaylist.ref)
+        notifyDataSetChanged()
     }
 
 }
