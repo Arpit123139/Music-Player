@@ -43,13 +43,14 @@
         android:id="@+id/playlistRV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/linearLayout"
+        android:layout_marginTop="10dp"
+        android:paddingBottom="40dp"
         android:scrollbarThumbVertical="@drawable/scroll_bar_icon"
         android:scrollbars="vertical"
-        android:paddingBottom="40dp"
-        android:layout_marginTop="10dp"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/linearLayout"
+        tools:listitem="@layout/playlist_view" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/addPlaylistBtn"
@@ -81,6 +82,7 @@
         android:padding="16dp"
         android:gravity="center"
         android:textColor="@color/black"
+        android:visibility="gone"
         />
 
 
