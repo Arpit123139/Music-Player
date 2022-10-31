@@ -47,6 +47,7 @@ class PlaylistViewAdapter(private val context: Context, private var playlistList
             customDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.RED)
         }
 
+        /***********************************************When we click on the PlayList Itself********************************/
         holder.root.setOnClickListener{
 
             val intent=Intent(context,PlaylistDetails::class.java)
