@@ -28,7 +28,7 @@ class PlaylistViewAdapter(private val context: Context, private var playlistList
         holder.name.text=playlistList[position].name
         holder.name.isSelected=true                         // For the moving Text
 
-        //When we press the delete button
+        /*********************************************88When we press the delete button*********************/
         holder.delete.setOnClickListener{
             /**************************Alert Dialog Box*****************************************************/
             val builder= MaterialAlertDialogBuilder(context)

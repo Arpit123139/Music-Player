@@ -10,7 +10,8 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.spotify.databinding.MusicViewBinding
 
-class MusicAdapter(private val context: Context, private var musicList: ArrayList<Music>):RecyclerView.Adapter<MusicAdapter.MyHolder>() {
+// The last [parameter is passed to determine if it is  a playlist detail
+class MusicAdapter(private val context: Context, private var musicList: ArrayList<Music>,private var playlistDetails: Boolean=false):RecyclerView.Adapter<MusicAdapter.MyHolder>() {
 
     class MyHolder(binding: MusicViewBinding) :RecyclerView.ViewHolder(binding.root) {
 
