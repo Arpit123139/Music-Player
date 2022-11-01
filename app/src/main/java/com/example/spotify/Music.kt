@@ -60,6 +60,10 @@ fun getImgArt(path:String): ByteArray? {                        // We cannot set
 /*************************************For Closing the Activity*********************************************/
 fun exitApplication(){
     if(PlayerActivity!=null){
+
+        /******************To Release The Resources When The Application Closes ************************/
+        PlayerActivity.musicService!!.audioManager.abandonAudioFocus(PlayerActivity.musicService)
+
         PlayerActivity.musicService!!.stopForeground(true)
         PlayerActivity.musicService=null;
         PlayerActivity.musicService!!.mediaPlayer!!.release()

@@ -14,7 +14,7 @@ import android.os.Looper
 import android.support.v4.media.session.MediaSessionCompat
 import androidx.core.app.NotificationCompat
 
-class MusicService: Service() {
+class MusicService: Service(),AudioManager.OnAudioFocusChangeListener {              /******This Library is added so that if the call arrive than the song must stop and call should continue*******/
 
     private var myBinder = MyBinder()
     var mediaPlayer:MediaPlayer? = null
@@ -126,6 +126,28 @@ class MusicService: Service() {
         //It makes assure  the inner/above code should execute after 0ms after this code is executed then we went to the inner Handler which say the code inside the runnable should execute after 200ms
         Handler(Looper.getMainLooper()).postDelayed(runnable,0)
 
+    }
+
+    /******This Library is added so that if the call arrive than the song must stop and call should continue*******/
+    override fun onAudioFocusChange(focusChange: Int) {
+
+        if(focusChange<=0){                // request is unsuccesfull
+            //pause Music
+            PlayerActivity.binding.playPauseBtnPA.setIconResource(R.drawable.play_icon)
+            PlayerActivity.musicService!!.showNotificaton(R.drawable.play_icon)
+            //fOR cHANGING THE ICON OF NowPlaing
+           NowPlaying.binding.playPauseBtnNP.setIconResource(R.drawable.play_icon)
+            PlayerActivity.isPlaying =false
+            PlayerActivity.musicService!!.mediaPlayer!!.pause()
+        }else{
+            //play Music
+            PlayerActivity.binding.playPauseBtnPA.setIconResource(R.drawable.pause_icon)
+            PlayerActivity.musicService!!.showNotificaton(R.drawable.pause_icon)
+            //fOR cHANGING THE ICON OF NowPlaing
+            NowPlaying.binding.playPauseBtnNP.setIconResource(R.drawable.pause_icon)
+            PlayerActivity.isPlaying =true
+            PlayerActivity.musicService!!.mediaPlayer!!.start()
+        }
     }
 
 }

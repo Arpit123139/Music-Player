@@ -1,9 +1,11 @@
 package com.example.spotify
 
 import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
 import android.graphics.Color
+import android.media.AudioManager
 import android.media.MediaPlayer
 import android.media.audiofx.AudioEffect
 import android.net.Uri
@@ -359,6 +361,10 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection ,MediaPlayer.OnComp
        // musicService!!.showNotificaton(R.drawable.pause_icon)                   /*************This function call should be inside the creteMediaPlayer because as soon as the nextButton is clicked it creates a media Player but dont call the show Notification function so by default we put it inside  THIS IS FOR THE MAIN SCREEN
 
         musicService!!.seekBarSetup()
+
+        /******This Library is added so that if the call arrive than the song must stop and call should continue*******/
+        musicService!!.audioManager=getSystemService(Context.AUDIO_SERVICE) as AudioManager
+        musicService!!.audioManager.requestAudioFocus(musicService,AudioManager.STREAM_MUSIC,AudioManager.AUDIOFOCUS_GAIN)         // JAB FOCUS MIL JAAEGA TOH AUDIO KO PLAY KAR SAKTE HAIN
     }
 
     override fun onServiceDisconnected(p0: ComponentName?) {
