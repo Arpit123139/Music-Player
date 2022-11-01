@@ -24,10 +24,10 @@ class PlayListActivity : AppCompatActivity() {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTheme(R.style.coolPink)
 
         binding= ActivityPlayListBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        setTheme(R.style.coolPink)
 
         /*********************************************INITIALIZING THE ADAPTER****************************************/
         binding.playlistRV.setHasFixedSize(true)                 // It does not create extra object
@@ -108,5 +108,10 @@ class PlayListActivity : AppCompatActivity() {
             musicPlaylist.ref.add(tempPlaylist)
             adapter.refreshPlayList()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        adapter.refreshPlayList()
     }
 }

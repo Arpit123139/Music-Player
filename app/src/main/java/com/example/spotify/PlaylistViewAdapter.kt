@@ -8,6 +8,8 @@ import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.spotify.databinding.PlaylistViewBinding
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
@@ -54,6 +56,14 @@ class PlaylistViewAdapter(private val context: Context, private var playlistList
             intent.putExtra("index",position)
             ContextCompat.startActivity(context,intent,null);
         }
+
+        /************************For Image**********************/
+        if(PlayListActivity.musicPlaylist.ref[position].playlist.size>0){
+            Glide.with(context)
+                .load(PlayListActivity.musicPlaylist.ref[PlaylistDetails.currentPlayListpos].playlist[0].artUri)
+                .apply(RequestOptions().placeholder(R.drawable.music).centerCrop())        // If the image does not load properly
+                .into(holder.image)
+        }
     }
 
     override fun getItemCount(): Int {
@@ -65,5 +75,7 @@ class PlaylistViewAdapter(private val context: Context, private var playlistList
         playlistList.addAll(PlayListActivity.musicPlaylist.ref)
         notifyDataSetChanged()
     }
+
+
 
 }

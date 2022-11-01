@@ -17,6 +17,13 @@
         android:supportsRtl="true"
         android:theme="@style/splash_screen">
         <activity
+            android:name=".SelectionActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".PlaylistDetails"
             android:exported="false" />
         <activity

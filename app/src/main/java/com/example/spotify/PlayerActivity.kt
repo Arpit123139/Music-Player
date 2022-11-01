@@ -244,6 +244,25 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection ,MediaPlayer.OnComp
                 setLayout()
             }
 
+            "PlayListDetailsAdapter"->{
+                val intent= Intent(this,MusicService::class.java)
+                bindService(intent,this, BIND_AUTO_CREATE)
+                startService(intent)
+                musicListPA= ArrayList()
+                musicListPA.addAll(PlayListActivity.musicPlaylist.ref[PlaylistDetails.currentPlayListpos].playlist)
+                setLayout()
+            }
+
+            "PlayListDetailsShuffle"->{
+                val intent= Intent(this,MusicService::class.java)
+                bindService(intent,this, BIND_AUTO_CREATE)
+                startService(intent)
+                musicListPA= ArrayList()
+                musicListPA.addAll(PlayListActivity.musicPlaylist.ref[PlaylistDetails.currentPlayListpos].playlist)
+                musicListPA.shuffle()
+                setLayout()
+            }
+
         }
     }
 

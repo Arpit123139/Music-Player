@@ -66,6 +66,7 @@ class MainActivity : AppCompatActivity() {
 
         if(requestRuntimePermission())    /**************************THE BELOW CODE SHOULD ONLY BE EXECUTED WHEN PERMISIION IS ALLOWED ELSE THE APP WILL BE CRASHED*/
         {
+
             search=false
             /************************TO ACCESS ALL THE MEDIA FILES AND CREATING LIST ****************************************************************************/
             MusicListMA=getAllAudio()         //This function is created below
@@ -75,7 +76,7 @@ class MainActivity : AppCompatActivity() {
             binding.musicRV.setHasFixedSize(true)                 // It does not create extra object
             binding.musicRV.setItemViewCacheSize(13)              // How many items are there in the cache
 
-            binding.musicRV.layoutManager=LinearLayoutManager(this@MainActivity)
+            binding.musicRV.layoutManager= LinearLayoutManager(this@MainActivity)
             musicAdapter= MusicAdapter(this@MainActivity, MusicListMA)
             binding.musicRV.adapter=musicAdapter
             binding.totalSongs.text="Total Songs : "+ MusicListMA.size.toString()
@@ -90,6 +91,15 @@ class MainActivity : AppCompatActivity() {
                 val data :ArrayList<Music> = GsonBuilder().create().fromJson(jsonString,typeToken)    // Converting json String to a specific type that is TypeTokem
                  FavoutiteActivity.favouriteSongs.addAll(data)                                        // Adding To the favouriteList
             }
+
+
+            /*********************************************FOR RETRIEVING PLAYLIST DATA USING SHARED PREFERENCES**************/
+//            PlayListActivity.musicPlaylist = MusicPlayList()
+//            val jsonStringPlaylist = editor.getString("MusicPlaylist", null)
+//            if(jsonStringPlaylist != null){
+//                val dataPlaylist: MusicPlayList = GsonBuilder().create().fromJson(jsonStringPlaylist, MusicPlayList::class.java)
+//                PlayListActivity.musicPlaylist = dataPlaylist
+//            }
         }
 
 
@@ -146,6 +156,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
+
 
     //For requesting permission it will return true and false
     private fun requestRuntimePermission() :Boolean{
@@ -265,12 +276,19 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
 
+        super.onResume()
         /*********************************************FOR STORING FAVOURITES DATA USING SHARED PREFERENCES**************/
         val editor=getSharedPreferences("FAVOURITES", MODE_PRIVATE).edit()
         val jsonString= GsonBuilder().create().toJson(FavoutiteActivity.favouriteSongs);    // Converting favouriteSong list into jsonString
         editor.putString("FavouriteSongs",jsonString)            // Store in the key value pair....
         editor.apply()
-        super.onResume()
+
+        /*********************************************FOR STORING FAVOURITES DATA USING SHARED PREFERENCES**************/
+
+        val jsonStringPlayList= GsonBuilder().create().toJson(PlayListActivity.musicPlaylist);    // Converting favouriteSong list into jsonString
+        editor.putString("MusicPlaylist",jsonStringPlayList)            // Store in the key value pair....
+        editor.apply()
+
     }
 
 
