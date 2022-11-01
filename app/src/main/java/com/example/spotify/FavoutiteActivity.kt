@@ -22,7 +22,9 @@ class FavoutiteActivity : AppCompatActivity() {
 
         binding= ActivityFavoutiteBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        
+
+        /********************Checking if the song is not deleted from the Storage****************************************/
+        favouriteSongs= checkPlayList(favouriteSongs)
 
         binding.favouriteRV.setHasFixedSize(true)                 // It does not create extra object
         binding.favouriteRV.setItemViewCacheSize(13)              // How many items are there in the cache

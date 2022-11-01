@@ -26,6 +26,8 @@ class PlaylistDetails : AppCompatActivity() {
         setContentView(binding.root)
         currentPlayListpos= intent.extras?.getInt("index",-1)!!
        // Toast.makeText(this,"${currentPlayListpos}",Toast.LENGTH_SHORT).show()
+        /********************Checking if the song is not deleted from the Storage****************************************/
+        PlayListActivity.musicPlaylist.ref[currentPlayListpos].playlist= checkPlayList(PlayListActivity.musicPlaylist.ref[currentPlayListpos].playlist)
 
         binding.playDetailRV.setItemViewCacheSize(18);
         binding.playDetailRV.layoutManager=LinearLayoutManager(this);

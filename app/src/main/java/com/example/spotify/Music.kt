@@ -1,6 +1,7 @@
 package com.example.spotify
 
 import android.media.MediaMetadataRetriever
+import java.io.File
 import java.util.concurrent.TimeUnit
 import kotlin.system.exitProcess
 
@@ -77,5 +78,16 @@ fun favouriteChecker(id: String):Int{
 
     }
     return -1;
+}
+
+/*********************************************If by chance the user deletes the file from the storage then it will not be deleted from the Favourites and Playlist so we check here whether it exsist in file or not*********/
+fun checkPlayList(playlist:ArrayList<Music>):ArrayList<Music>{
+
+    playlist.forEachIndexed { index, music ->
+        val file= File(music.path)
+        if(!file.exists())
+            playlist.removeAt(index);
+    }
+    return playlist
 }
 
