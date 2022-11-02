@@ -1,5 +1,7 @@
 package com.example.spotify
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -18,11 +20,31 @@ class FeedbackActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title="Feedback"
 
-
-        val feedbackMsg=binding.feedbackMsgFA.text.toString()+"\n"+binding.emailFA.text.toString()
-        val subject=binding.topicFA.text.toString()
         binding.sendFA.setOnClickListener {
-            Toast.makeText(this,feedbackMsg,Toast.LENGTH_LONG).show()
+//            val feedbackMsg=binding.feedbackMsgFA.text.toString()+"\n"+binding.emailFA.text.toString()
+            val subject=binding.topicFA.text.toString().trim()
+            val feedback=binding.feedbackMsgFA.text.toString().trim()
+            /*************************************************SENDING THE MAIL***************************************/
+            val userName="1ms20is023@gmail.com"                              // to Email Address To Whom the email is to be sent
+            if(feedback.isNotEmpty() && subject.isNotEmpty()){
+
+                val mailId=userName.trim()
+
+                var i=Intent(Intent.ACTION_SEND)
+                i.data = Uri.parse("Mail to: ")
+                i.type ="text/plain"
+
+                i.putExtra(Intent.EXTRA_EMAIL, arrayOf(mailId))                  // Recievr Email Address
+                i.putExtra(Intent.EXTRA_SUBJECT,subject)
+                i.putExtra(Intent.EXTRA_TEXT,feedback)
+
+                startActivity(Intent.createChooser(i,"Choose Email Client"))
+
+            }
+            else{
+                Toast.makeText(this,"Went Something Wrong",Toast.LENGTH_LONG).show()
+            }
+
         }
     }
 }

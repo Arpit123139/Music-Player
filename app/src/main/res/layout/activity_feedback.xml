@@ -20,6 +20,7 @@
         android:id="@+id/emailFA"
         android:layout_width="match_parent"
         android:layout_height="80dp"
+        android:layout_marginTop="5dp"
         android:hint="@string/email_feedback"
         android:gravity="center|start"
         android:inputType="textEmailAddress"
