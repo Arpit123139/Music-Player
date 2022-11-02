@@ -107,11 +107,11 @@ class MainActivity : AppCompatActivity() {
         /********************************************8SETTING UP A ALERT DIALOG BOX FOR EXIT OPTION*************************/
         binding.navView.setNavigationItemSelectedListener{
             when(it.itemId){
-                R.id.navFeedback->Toast.makeText(this,"Feedback Clicked",Toast.LENGTH_SHORT).show()
+                R.id.navFeedback->startActivity(Intent(this,FeedbackActivity::class.java))
 
-                R.id.navAbout->Toast.makeText(this,"About Clicked",Toast.LENGTH_SHORT).show()
+                R.id.navAbout->startActivity(Intent(this,AboutActivity::class.java))
 
-                R.id.navSettings->Toast.makeText(this,"Settings Clicked",Toast.LENGTH_SHORT).show()
+                R.id.navSettings->startActivity(Intent(this,SettingsActivity::class.java))
 
                 R.id.navExit-> {
                     val builder=MaterialAlertDialogBuilder(this)

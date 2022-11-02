@@ -6,10 +6,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context=".PlayerActivity"
-
-
-
-
     >
 
     <LinearLayout
