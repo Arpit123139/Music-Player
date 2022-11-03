@@ -215,7 +215,8 @@ class MainActivity : AppCompatActivity() {
         val projection=arrayOf(MediaStore.Audio.Media._ID,MediaStore.Audio.Media.TITLE,MediaStore.Audio.Media.ALBUM,MediaStore.Audio.Media.ARTIST,MediaStore.Audio.Media.DURATION,MediaStore.Audio.Media.DATE_ADDED,MediaStore.Audio.Media.DATA,MediaStore.Audio.Media.ALBUM_ID)        // tHE second Last Parameter is to sort it according to the Date
 
         // cursor
-        val cursor=this.contentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,projection,selection,null,MediaStore.Audio.Media.DATE_ADDED +" DESC",null)
+        val cursor=this.contentResolver.query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,projection,selection,null,
+            sortingList[sortOrder],null)
 
         if(cursor!=null)
             if(cursor.moveToFirst())                                // move it to the first Position
@@ -310,6 +311,14 @@ class MainActivity : AppCompatActivity() {
         editor.putString("MusicPlaylist",jsonStringPlayList)            // Store in the key value pair....
         editor.apply()
 
+        /**********************FOR SORTING*****************************/
+        val sortEditor=getSharedPreferences("SORTING", MODE_PRIVATE)
+        val sortValue = sortEditor.getInt("sortOrder",0)
+        if(sortOrder!=sortValue){
+            sortOrder=sortValue
+            MusicListMA=getAllAudio()
+            musicAdapter.updateMusicList(MusicListMA)
+        }
     }
 
 
