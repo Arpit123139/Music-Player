@@ -19,6 +19,8 @@ class NowPlaying : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        /***************etting the Theme***********************************/
+        requireContext().theme.applyStyle(MainActivity.currentTheme[MainActivity.themeIndex],true)
         val view=inflater.inflate(R.layout.fragment_now_playing, container, false)
         binding= FragmentNowPlayingBinding.bind(view)
         binding.root.visibility=View.INVISIBLE

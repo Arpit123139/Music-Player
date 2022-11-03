@@ -13,7 +13,8 @@ class SettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySettingsBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setTheme(R.style.coolPinkNav)
+
+        setTheme(MainActivity.currentThemeNav[MainActivity.themeIndex])
         binding= ActivitySettingsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

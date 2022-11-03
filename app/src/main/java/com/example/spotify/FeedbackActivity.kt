@@ -12,12 +12,11 @@ class FeedbackActivity : AppCompatActivity() {
     private lateinit var binding: ActivityFeedbackBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        setTheme(MainActivity.currentThemeNav[MainActivity.themeIndex])
         binding=ActivityFeedbackBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setTheme(R.style.coolPinkNav)
 
-
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title="Feedback"
 
         binding.sendFA.setOnClickListener {

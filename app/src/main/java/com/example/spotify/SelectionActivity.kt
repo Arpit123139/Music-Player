@@ -15,7 +15,7 @@ class SelectionActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding= ActivitySelectionBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setTheme(R.style.coolPink)
+        setTheme(MainActivity.currentTheme[MainActivity.themeIndex])
 
         binding.selectionRV.setItemViewCacheSize(18);
         binding.selectionRV.layoutManager= LinearLayoutManager(this);

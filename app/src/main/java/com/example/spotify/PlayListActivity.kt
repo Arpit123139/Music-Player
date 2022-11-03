@@ -25,9 +25,11 @@ class PlayListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
+        setTheme(MainActivity.currentTheme[MainActivity.themeIndex])
         binding= ActivityPlayListBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        setTheme(R.style.coolPink)
+
 
         /*********************************************INITIALIZING THE ADAPTER****************************************/
         binding.playlistRV.setHasFixedSize(true)                 // It does not create extra object
