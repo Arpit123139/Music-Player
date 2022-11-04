@@ -42,7 +42,7 @@ class NowPlaying : Fragment() {
             binding.SongNameNP.text =PlayerActivity.musicListPA[PlayerActivity.songPosition].title;
 
             // When we change the song through now Fragment then it must be change in the notification  and vice versa is done in Notification Reciever
-            PlayerActivity.musicService!!.showNotificaton(R.drawable.pause_icon)
+            PlayerActivity.musicService!!.showNotificaton(R.drawable.pause_icon,1f)
 
             PlayMusic();
         }
@@ -82,7 +82,7 @@ class NowPlaying : Fragment() {
     private fun PlayMusic(){
         PlayerActivity.musicService!!.mediaPlayer!!.start()
         binding.playPauseBtnNP.setIconResource(R.drawable.pause_icon)
-        PlayerActivity.musicService!!.showNotificaton(R.drawable.pause_icon)          // As we play/pause through the nowFragment the effect must be visible in the notification as well as the player Activity
+        PlayerActivity.musicService!!.showNotificaton(R.drawable.pause_icon,1f)          // As we play/pause through the nowFragment the effect must be visible in the notification as well as the player Activity
         PlayerActivity.binding.nextBtnPA.setIconResource(R.drawable.pause_icon)
         PlayerActivity.isPlaying=true
     }
@@ -90,7 +90,7 @@ class NowPlaying : Fragment() {
 
         PlayerActivity.musicService!!.mediaPlayer!!.pause()
         binding.playPauseBtnNP.setIconResource(R.drawable.play_icon)
-        PlayerActivity.musicService!!.showNotificaton(R.drawable.play_icon)
+        PlayerActivity.musicService!!.showNotificaton(R.drawable.play_icon,0f)
         PlayerActivity.binding.nextBtnPA.setIconResource(R.drawable.play_icon)
         PlayerActivity.isPlaying=false
     }

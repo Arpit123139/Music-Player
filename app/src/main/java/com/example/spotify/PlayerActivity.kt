@@ -207,12 +207,14 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection ,MediaPlayer.OnComp
 
             val dataColoumn=cursor?.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)
             val durationColoumn=cursor?.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)
+            val titleColumn=cursor?.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE)
 
             cursor!!.moveToFirst()
+            val title=titleColumn?.let { cursor?.getString(it) }
             val path= dataColoumn?.let { cursor?.getString(it) }
             val duration=durationColoumn?.let { cursor.getLong(it) }
 
-            return Music("Unknown", title = path.toString(),"Unknown","Unknown",duration!!, artUri = "Unknown", path = path.toString())
+            return Music("Unknown", title = title.toString(),"Unknown","Unknown",duration!!, artUri = "Unknown", path = path.toString())
         }finally {
             cursor?.close()
         }
@@ -342,7 +344,7 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection ,MediaPlayer.OnComp
             musicService!!.mediaPlayer!!.start()
             isPlaying=true
             binding.playPauseBtnPA.setIconResource(R.drawable.pause_icon)
-            musicService!!.showNotificaton(R.drawable.pause_icon)
+            musicService!!.showNotificaton(R.drawable.pause_icon,1f)
 
             /**************************************Setting the current time stamp of the song and the final Duration and the seekbar *****/
             binding.tvSeekBarStart.text= formatDuration(musicService!!.mediaPlayer!!.currentPosition.toLong())
@@ -361,7 +363,7 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection ,MediaPlayer.OnComp
     /********************************************************PLAY MUSIC*************************************************************************/
     private fun playMusic(){
         binding.playPauseBtnPA.setIconResource(R.drawable.pause_icon)
-        musicService!!.showNotificaton(R.drawable.pause_icon)
+        musicService!!.showNotificaton(R.drawable.pause_icon,1f)
         isPlaying=true
         musicService!!.mediaPlayer!!.start()
     }
@@ -369,7 +371,7 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection ,MediaPlayer.OnComp
     /***********************************************************PAUSE MUSIC**********************************************************************/
     private fun pauseMusic(){
         binding.playPauseBtnPA.setIconResource(R.drawable.play_icon)
-        musicService!!.showNotificaton(R.drawable.play_icon)
+        musicService!!.showNotificaton(R.drawable.play_icon,0f)
         isPlaying=false
         musicService!!.mediaPlayer!!.pause()
 

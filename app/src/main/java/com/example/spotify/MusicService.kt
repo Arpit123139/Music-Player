@@ -7,11 +7,10 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import android.media.AudioManager
 import android.media.MediaPlayer
-import android.os.Binder
-import android.os.Handler
-import android.os.IBinder
-import android.os.Looper
+import android.os.*
+import android.support.v4.media.MediaMetadataCompat
 import android.support.v4.media.session.MediaSessionCompat
+import android.support.v4.media.session.PlaybackStateCompat
 import androidx.core.app.NotificationCompat
 
 class MusicService: Service(),AudioManager.OnAudioFocusChangeListener {              /******This Library is added so that if the call arrive than the song must stop and call should continue*******/
@@ -36,7 +35,7 @@ class MusicService: Service(),AudioManager.OnAudioFocusChangeListener {         
     }
 
     @SuppressLint("UnspecifiedImmutableFlag")
-    fun showNotificaton(playPauseBtn:Int){
+    fun showNotificaton(playPauseBtn:Int,plabackSpeed:Float){
         /******************************Pending Intent -- A PendingIntent object wraps the functionality of an Intent object while allowing your app to specify something that another app should do, on your app’s behalf, in response to a future action*/
 
         val notificationIntent = Intent(this, MainActivity::class.java)              // when the notification is click go to the MainActivity
@@ -81,6 +80,19 @@ class MusicService: Service(),AudioManager.OnAudioFocusChangeListener {         
                     .setContentIntent(pendingIntent)
                     .build()
 
+        /****************************************************SEEKBAR IN NOTIFICATION**************************************/
+        //This feature is Available in Android10 and above
+        if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.Q){
+            mediaSession.setMetadata(MediaMetadataCompat.Builder()
+                .putLong(MediaMetadataCompat.METADATA_KEY_DURATION,mediaPlayer!!.duration.toLong())
+                .build())
+
+            mediaSession.setPlaybackState(PlaybackStateCompat.Builder()
+                .setState(PlaybackStateCompat.STATE_PLAYING,mediaPlayer!!.currentPosition.toLong(),plabackSpeed)    // Jab song playing ho toh uski position kya honi chahoiye  AUR PLAYBACK BATATA HAI KI SEEKBAR KI SPEED KYA HONI CHAHIYE JAB PAUSE HO TOH 0f AUR JAB PLAY TOH 1f ki 1 sec se bade
+                .setActions(PlaybackStateCompat.ACTION_SEEK_TO)
+                .build())
+
+        }
         startForeground(12,notification)
 
     }
@@ -134,7 +146,7 @@ class MusicService: Service(),AudioManager.OnAudioFocusChangeListener {         
         if(focusChange<=0){                // request is unsuccesfull
             //pause Music
             PlayerActivity.binding.playPauseBtnPA.setIconResource(R.drawable.play_icon)
-            PlayerActivity.musicService!!.showNotificaton(R.drawable.play_icon)
+            PlayerActivity.musicService!!.showNotificaton(R.drawable.play_icon,0f)
             //fOR cHANGING THE ICON OF NowPlaing
            NowPlaying.binding.playPauseBtnNP.setIconResource(R.drawable.play_icon)
             PlayerActivity.isPlaying =false
@@ -142,7 +154,7 @@ class MusicService: Service(),AudioManager.OnAudioFocusChangeListener {         
         }else{
             //play Music
             PlayerActivity.binding.playPauseBtnPA.setIconResource(R.drawable.pause_icon)
-            PlayerActivity.musicService!!.showNotificaton(R.drawable.pause_icon)
+            PlayerActivity.musicService!!.showNotificaton(R.drawable.pause_icon,1f)
             //fOR cHANGING THE ICON OF NowPlaing
             NowPlaying.binding.playPauseBtnNP.setIconResource(R.drawable.pause_icon)
             PlayerActivity.isPlaying =true

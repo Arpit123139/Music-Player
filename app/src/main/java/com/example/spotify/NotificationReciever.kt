@@ -39,14 +39,14 @@ class NotificationReciever :BroadcastReceiver() {
     private fun playMusic(){
         PlayerActivity.isPlaying=true;
         PlayerActivity.musicService!!.mediaPlayer!!.start()
-        PlayerActivity.musicService!!.showNotificaton(R.drawable.pause_icon)
+        PlayerActivity.musicService!!.showNotificaton(R.drawable.pause_icon,1f)
         PlayerActivity.binding.playPauseBtnPA.setIconResource(R.drawable.pause_icon)
         NowPlaying.binding.playPauseBtnNP.setIconResource(R.drawable.pause_icon)
     }
     private fun pauseMusic(){
         PlayerActivity.isPlaying=false;
         PlayerActivity.musicService!!.mediaPlayer!!.pause()
-        PlayerActivity.musicService!!.showNotificaton(R.drawable.play_icon)
+        PlayerActivity.musicService!!.showNotificaton(R.drawable.play_icon,0f)
         PlayerActivity.binding.playPauseBtnPA.setIconResource(R.drawable.play_icon)
         NowPlaying.binding.playPauseBtnNP.setIconResource(R.drawable.play_icon)
     }
@@ -58,7 +58,7 @@ class NotificationReciever :BroadcastReceiver() {
          PlayerActivity.musicService!!.createMediaPlayer()
 
         //set the button to pause inside the notification
-        PlayerActivity.musicService!!.showNotificaton(R.drawable.pause_icon)
+        PlayerActivity.musicService!!.showNotificaton(R.drawable.pause_icon,1f)
 
         // when we click the notification it should also set the layout of the mainScreen with the image and the song Name so we use the setLayout Method in PlayerActivity
 
