@@ -4,6 +4,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.ServiceConnection
+import android.database.Cursor
 import android.graphics.Color
 import android.media.AudioManager
 import android.media.MediaPlayer
@@ -11,6 +12,7 @@ import android.media.audiofx.AudioEffect
 import android.net.Uri
 import android.os.Bundle
 import android.os.IBinder
+import android.provider.MediaStore
 import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.Toast
@@ -58,7 +60,23 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection ,MediaPlayer.OnComp
 //        bindService(intent,this, BIND_AUTO_CREATE)
 //        startService(intent)
 
-        IntializeLayout()
+        /**************************************If It Arrives Through Intent Chooser***************************/
+        if(intent.data?.scheme.contentEquals("content")){
+
+            val intentService= Intent(this,MusicService::class.java)
+            bindService(intentService,this, BIND_AUTO_CREATE)
+            startService(intentService)
+            musicListPA= ArrayList()
+            musicListPA.add(getMusicDetails(intent.data!!))
+
+            //getImgArt function created in Music.kt
+            Glide.with(this).load(getImgArt(musicListPA[songPosition].path)).apply(RequestOptions().placeholder(R.drawable.music).centerCrop())        // If the image does not load properly
+                .into(binding.songImgPA)
+
+            binding.songNamePA.text= musicListPA[songPosition].title
+
+
+        }else IntializeLayout()
 
 
         /*********************************************PLAY-PAUSE BTN************************************************************************/
@@ -175,6 +193,28 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection ,MediaPlayer.OnComp
                 //Add the song to the List
                 FavoutiteActivity.favouriteSongs.add(musicListPA[songPosition])
             }
+        }
+    }
+
+    /*********************************************It will give the detail of the song WHEN CHOOSEN RANDOMLY FROM STORAGE AND BE PLAYED IN OUR PLAYER *********************************/
+    private fun getMusicDetails(contentUri: Uri): Music {
+
+        // As It is A single song we cannot access the whole data
+        var cursor:Cursor?=null
+        try {
+            val projection= arrayOf(MediaStore.Audio.Media.DATA,MediaStore.Audio.Media.DURATION,MediaStore.Audio.Media.TITLE)
+            cursor=this.contentResolver.query(contentUri,projection,null,null,null)
+
+            val dataColoumn=cursor?.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA)
+            val durationColoumn=cursor?.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION)
+
+            cursor!!.moveToFirst()
+            val path= dataColoumn?.let { cursor?.getString(it) }
+            val duration=durationColoumn?.let { cursor.getLong(it) }
+
+            return Music("Unknown", title = path.toString(),"Unknown","Unknown",duration!!, artUri = "Unknown", path = path.toString())
+        }finally {
+            cursor?.close()
         }
     }
 
@@ -424,5 +464,11 @@ class PlayerActivity : AppCompatActivity(),ServiceConnection ,MediaPlayer.OnComp
             dialog.dismiss()
         }
 
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+
+        if(musicListPA[songPosition].id=="Unknown" && isPlaying) exitApplication()
     }
 }
